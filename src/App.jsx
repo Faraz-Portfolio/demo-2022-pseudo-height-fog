@@ -1,30 +1,21 @@
-import "./styles.css";
-import { Canvas } from "@react-three/fiber";
 import {
-  Box,
-  Cloud,
-  Environment,
   Instance,
   Instances,
   OrbitControls,
   OrthographicCamera,
-  PerspectiveCamera,
-  Sphere,
-  Stats,
-  useTexture
 } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { folder, Leva, useControls } from "leva";
+import { Color, Euler, MathUtils, Vector3 } from "three";
 import { Floor } from "./components/Floor";
 import Lights from "./components/Lights";
-import { Color, Euler, MathUtils, RepeatWrapping, Vector3 } from "three";
 import Fog from "./lib/Fog";
-import { Suspense } from "react";
-import { folder, Leva, useControls } from "leva";
 
 const arr = new Array(800).fill(0).map((_, i) => {
   const scale = [
     MathUtils.randFloat(0.1, 1), //
     MathUtils.randFloat(2, 10),
-    MathUtils.randFloat(0.1, 0.5)
+    MathUtils.randFloat(0.1, 0.5),
   ];
   const size = 100;
   const pos = new Vector3().random().multiplyScalar(size);
@@ -64,51 +55,51 @@ export default function App() {
     Fog: folder({
       Fog_enbled: {
         label: "Enable",
-        value: true
+        value: true,
       },
       Fog_color: {
         label: "Color",
-        value: "#ffffff"
+        value: "#ffffff",
       },
       Fog_density: {
         label: "Density",
         min: 0,
         max: 1,
         step: 0.01,
-        value: 0.3
+        value: 0.3,
       },
       Fog_speed: {
         label: "Speed",
         min: 0,
         max: 10,
         step: 0.1,
-        value: 1.7
+        value: 1.7,
       },
       Fog_distortion: {
         label: "Distortion",
         min: 0,
         max: 2,
         step: 0.01,
-        value: 1.3
+        value: 1.3,
       },
       Fog_scale: {
         label: "Scale",
         min: 0,
         max: 100,
         step: 1,
-        value: [100, 2.5, 100]
+        value: [100, 2.5, 100],
       },
       Fog_position: {
         label: "Position",
         min: 0,
         max: 100,
         step: 1,
-        value: [0, 0, 0]
-      }
+        value: [0, 0, 0],
+      },
     }),
     AutoRotate: {
-      value: true
-    }
+      value: true,
+    },
   });
 
   return (
