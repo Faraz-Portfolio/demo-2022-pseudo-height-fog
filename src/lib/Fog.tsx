@@ -1,7 +1,7 @@
-import * as THREE from "three";
-import * as React from "react";
 import * as FIBER from "@react-three/fiber";
 import { useFrame, useThree } from "@react-three/fiber";
+import * as React from "react";
+import * as THREE from "three";
 import { Noise } from "./Noise";
 
 interface FogProps {
@@ -14,7 +14,7 @@ interface FogProps {
   position: FIBER.Vector3;
 }
 
-type FogExp2Porps = FIBER.NodeProps<THREE.FogExp2, typeof THREE.FogExp2>;
+type FogExp2Porps = FIBER.ThreeElements["fogExp2"];
 
 export default function Fog({
   color = 0xffffff,
@@ -85,7 +85,7 @@ export default function Fog({
 
   const args = React.useMemo<any>(() => [color, density], [color, density]);
 
-  const shaders = React.useRef([]);
+  const shaders = React.useRef<THREE.WebGLProgramParametersWithUniforms[]>([]);
   const scene = useThree((s) => s.scene);
 
   React.useEffect(() => {
@@ -93,7 +93,7 @@ export default function Fog({
   }, [speed]);
   React.useEffect(() => {
     shaders.current.forEach(
-      (s) => (s.uniforms.uFogDistortion.value = distortion)
+      (s) => (s.uniforms.uFogDistortion.value = distortion),
     );
   }, [distortion]);
   React.useEffect(() => {
@@ -104,7 +104,7 @@ export default function Fog({
     shaders.current.forEach((s) => {
       if (Array.isArray(direction) && direction.length >= 3) {
         s.uniforms.uFogDirection.value = new THREE.Vector3().fromArray(
-          direction
+          direction,
         );
       } else if (direction instanceof THREE.Vector3) {
         s.uniforms.uFogDirection.value = direction;
@@ -134,7 +134,7 @@ export default function Fog({
 
   useFrame(({ clock }) => {
     shaders.current.forEach(
-      (s) => (s.uniforms.uFogTime.value = clock.elapsedTime)
+      (s) => (s.uniforms.uFogTime.value = clock.elapsedTime),
     );
   });
 
@@ -152,14 +152,16 @@ export default function Fog({
           s.uniforms.uFogDistortion = { value: distortion };
           s.uniforms.uFogDirection = {
             value: new THREE.Vector3().fromArray(
-              direction as THREE.Vector3Tuple
-            )
+              direction as THREE.Vector3Tuple,
+            ),
           };
           s.uniforms.uFogScale = {
-            value: new THREE.Vector3().fromArray(scale as THREE.Vector3Tuple)
+            value: new THREE.Vector3().fromArray(scale as THREE.Vector3Tuple),
           };
           s.uniforms.uFogPosition = {
-            value: new THREE.Vector3().fromArray(position as THREE.Vector3Tuple)
+            value: new THREE.Vector3().fromArray(
+              position as THREE.Vector3Tuple,
+            ),
           };
           shaders.current.push(s);
         };
@@ -167,5 +169,5 @@ export default function Fog({
     });
   }, []);
 
-  return <fogExp2 args={args} {...props} />;
+  return <fogExp2 {...props} args={args} />;
 }
